@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertidor de Energía</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a40, #800080); /* Gradiente azul oscuro y morado */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        /* Contenedor principal */
+        .convertidor {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2); /* Sombra cuadrada */
+            max-width: 400px;
+            text-align: center;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .convertidor:hover {
+            transform: scale(1.05);
+        }
+
+        /* Estilo del título */
+        h1 {
+            font-size: 2rem;
+            color: #1a1a40; /* Azul oscuro del gradiente */
+            margin-bottom: 20px;
+        }
+
+        /* Inputs y selectores */
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #1a1a40; /* Azul oscuro */
+            outline: none;
+            box-shadow: 0 0 8px rgba(26, 26, 64, 0.5); /* Efecto focus */
+        }
+
+        /* Botón */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #800080; /* Morado gradiente */
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #5e005e; /* Morado oscuro */
+        }
+
+        /* Resultado */
+        .resultado {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Fuente externa */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    </style>
+</head>
+<body>
+
+<div class="convertidor">
+    <h1>Convertidor de Energía</h1>
+
+    <input type="number" id="valor" placeholder="Introduce el valor">
+
+    <select id="unidad-origen">
+        <option value="julios">Julios (J)</option>
+        <option value="kwh">Kilovatios-hora (kWh)</option>
+        <option value="calorias">Calorías (cal)</option>
+        <option value="btu">BTU</option>
+    </select>
+
+    <select id="unidad-destino">
+        <option value="julios">Julios (J)</option>
+        <option value="kwh">Kilovatios-hora (kWh)</option>
+        <option value="calorias">Calorías (cal)</option>
+        <option value="btu">BTU</option>
+    </select>
+
+    <button onclick="convertir()">Convertir</button>
+
+    <div class="resultado" id="resultado"></div>
+</div>
+
+<script>
+    function convertir() {
+        const valor = parseFloat(document.getElementById("valor").value);
+        const unidadOrigen = document.getElementById("unidad-origen").value;
+        const unidadDestino = document.getElementById("unidad-destino").value;
+
+        if (isNaN(valor)) {
+            document.getElementById("resultado").textContent = "Por favor, introduce un valor válido.";
+            return;
+        }
+
+        let resultado;
+
+        // Factores de conversión a Julios
+        const conversionesAJulios = {
+            "julios": 1,
+            "kwh": 3600000,
+            "calorias": 4.184,
+            "btu": 1055.06
+        };
+
+        // Conversión de Julios
+        const conversionesDesdeJulios = {
+            "julios": 1,
+            "kwh": 1 / 3600000,
+            "calorias": 1 / 4.184,
+            "btu": 1 / 1055.06
+        };
+
+        // Convertimos de la unidad origen a Julios, luego de Julios a la unidad destino
+        resultado = valor * conversionesAJulios[unidadOrigen] * conversionesDesdeJulios[unidadDestino];
+
+        document.getElementById("resultado").textContent = `Resultado: ${resultado.toFixed(6)} ${unidadDestino.toUpperCase()}`;
+    }
+</script>
+
+</body>
+</html>
